@@ -881,10 +881,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fcc001bba394b4fa935c36a8d14c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 4
-  maxSpeed: 0
-  objectSpeed: 1
-  acceleration: 1
+  seed: 9
+  maxVelocity: 4
+  minVelocity: 1
 --- !u!1 &702276474
 GameObject:
   m_ObjectHideFlags: 0
