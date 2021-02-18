@@ -10,6 +10,7 @@ namespace snitch
         [SerializeField] private int seed;
         [SerializeField] private float maxVelocity;
         [SerializeField] private float minVelocity;
+        [SerializeField] private int speed;
 
         private Rigidbody rigidbody;
         private System.Random rng;
@@ -93,7 +94,7 @@ namespace snitch
                 Vector3 acceleration = Vector3.zero;
 
                 // Compute alignment
-                acceleration += forceDir * 2;
+                acceleration += forceDir * speed;
 
                 // Compute the new velocity
                 Vector3 velocity = rigidbody.velocity;

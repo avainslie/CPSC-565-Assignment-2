@@ -882,8 +882,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 9
-  maxVelocity: 4
+  maxVelocity: 9
   minVelocity: 1
+  speed: 15
 --- !u!1 &702276474
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,7 +962,7 @@ GameObject:
   - component: {fileID: 1193256881}
   - component: {fileID: 1193256880}
   - component: {fileID: 1193256879}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ceiling Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
