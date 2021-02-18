@@ -15,6 +15,8 @@ namespace snitch
         private System.Random rng;
         private Vector3 oldForceDir;
         private bool liftOff;
+        private float maxHeight;
+        private float minHeight;
 
         /****** PHYSICS 101 NOTES ******
         
