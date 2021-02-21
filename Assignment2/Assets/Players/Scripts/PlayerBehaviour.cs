@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace players{
+namespace Players{
     public class PlayerBehaviour : MonoBehaviour
     {
 
@@ -12,12 +12,14 @@ namespace players{
         [SerializeField] private float minVelocity;
         [SerializeField] private int speed;
 
+
         private Rigidbody rigidbody;
         private Vector3 oldForceDir;
         private System.Random rng;
         private float maxHeight;
         private float minHeight;
         private float mass;
+        public PlayerSettingsScriptable player;
 
         void Awake(){
 
@@ -25,8 +27,8 @@ namespace players{
 
             oldForceDir = Vector3.up * 5;
 
-            mass = 85f;
-            
+            mass = player.weight;
+
         }
 
         // Start is called before the first frame update
@@ -79,4 +81,3 @@ namespace players{
         }
     }       
 }
-
