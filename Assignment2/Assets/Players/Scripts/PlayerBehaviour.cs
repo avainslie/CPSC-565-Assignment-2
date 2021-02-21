@@ -17,12 +17,15 @@ namespace players{
         private System.Random rng;
         private float maxHeight;
         private float minHeight;
+        private float mass;
 
         void Awake(){
 
             rng = new System.Random(seed);  
 
             oldForceDir = Vector3.up * 5;
+
+            mass = 85f;
             
         }
 
@@ -51,11 +54,12 @@ namespace players{
                 Vector3 acceleration = Vector3.zero;
 
                 // Compute alignment
+                // speed is the magnitude of the vector while forceDir is the direction
                 acceleration += forceDir * speed;
 
-                // Compute the new velocity
+                // Compute the new velocity, taking into account mass
                 Vector3 velocity = rigidbody.velocity;
-                velocity += acceleration * Time.deltaTime;
+                velocity += (acceleration / mass) * Time.deltaTime;
 
                 // Ensure the velocity remains within the accepted range
                 velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,

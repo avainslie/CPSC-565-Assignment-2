@@ -18,6 +18,8 @@ namespace snitch
         private bool liftOff;
         private float maxHeight;
         private float minHeight;
+        private float mass;
+        private float momentum;
 
         /****** PHYSICS 101 NOTES ******
         
@@ -40,8 +42,12 @@ namespace snitch
             //Random.seed = System.DateTime.Now.Millisecond;
             // https://answers.unity.com/questions/1606295/transformrotate-doesnt-work-inside-start-method.html 
 
+            momentum = 0f;
 
             oldForceDir = Vector3.up * 5;
+
+            mass = 5f;
+
             liftOff = false;
         }
 
@@ -96,9 +102,9 @@ namespace snitch
                 // Compute alignment
                 acceleration += forceDir * speed;
 
-                // Compute the new velocity
+                 // Compute the new velocity, taking into account mass
                 Vector3 velocity = rigidbody.velocity;
-                velocity += acceleration * Time.deltaTime;
+                velocity += (acceleration / mass) * Time.deltaTime;
 
                 // Ensure the velocity remains within the accepted range
                 velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
@@ -111,6 +117,7 @@ namespace snitch
                 transform.forward = rigidbody.velocity.normalized;
 
                 //rigidbody.AddForce(forceDir * 15);
+
                 oldForceDir = forceDir;
             }  
 
