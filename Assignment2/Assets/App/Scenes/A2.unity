@@ -666,9 +666,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  maxVelocity: 25
   minVelocity: 5
   speed: 5
+  otherObject: {fileID: 37104857}
   player: {fileID: 11400000, guid: 27927bd4c0bd74600b147cdcbb77cf1f, type: 2}
 --- !u!54 &470532511
 Rigidbody:
@@ -1360,9 +1360,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  maxVelocity: 25
   minVelocity: 5
   speed: 5
+  otherObject: {fileID: 37104857}
   player: {fileID: 11400000, guid: 1ac94762dc1994a26b7199540dc2b527, type: 2}
 --- !u!54 &1383966456
 Rigidbody:
