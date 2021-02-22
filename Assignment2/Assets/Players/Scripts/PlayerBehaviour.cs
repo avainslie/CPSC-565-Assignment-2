@@ -10,8 +10,7 @@ namespace Players{
         [SerializeField] private int seed;
         [SerializeField] private float minVelocity;
         [SerializeField] private int speed;
-        public GameObject otherObject;
-
+        
 
         private Rigidbody rigidbody;
         private Vector3 oldForceDir;
@@ -23,8 +22,17 @@ namespace Players{
         private float maxVelocity;
         private float aggressiveness;
         private float maxExhaustion;
+        private float exhaustion;
+
+
+        public GameObject snitch;
+
+        public PlayerSettingsScriptable otherPlayerScriptable;
         
         void Awake(){
+
+            // Set rigid body to the one on the player in the scene
+            rigidbody = GetComponent<Rigidbody>();
 
             rng = new System.Random(seed);  
 
@@ -34,71 +42,67 @@ namespace Players{
             maxVelocity = player.maxVelocity;
             aggressiveness = player.aggressiveness;
             maxExhaustion = player.maxExhaustion;
+            exhaustion = 0f;
 
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            // Make snitch move up first before moving randomly
-            transform.Translate(oldForceDir);
-            
-
-            // Set rigid body to the one on the player in the scene
-            rigidbody = GetComponent<Rigidbody>();
         }
 
         // Update is called once per frame
         void Update()
         {
-
             // Taken from CPSC 565 - Lecture 8
 
-            float dist = Vector3.Distance(transform.position, otherObject.transform.position);
-            Vector3 dir = (otherObject.transform.position - transform.position);
+            float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
+            Vector3 dir = (snitch.transform.position - transform.position);
             dir.Normalize();
             // Vector3 times a float
             rigidbody.AddForce(dir * dist);
 
-
-
-
-
-
-            //Vector3 forceDir = new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1);
-
-            // Add the random Vector3 to the snitch's physics if it was not the last move the player made
-            // Inspired by Omar's code 
-            // https://github.com/omaddam/Boids-Simulation/blob/develop/Assets/Boids/Scripts/Bird.cs
-            // if (forceDir != oldForceDir){
-            
-            //     // Initialize the new velocity
-            //     Vector3 acceleration = Vector3.zero;
-
-            //     // Compute alignment
-            //     // speed is the magnitude of the vector while forceDir is the direction
-            //     acceleration += forceDir * speed;
-
-            //     // Compute the new velocity, taking into account mass
-            //     Vector3 velocity = rigidbody.velocity;
-            //     velocity += (acceleration / mass) * Time.deltaTime;
-
-            //     // Ensure the velocity remains within the accepted range
-            //     velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
-            //         minVelocity, maxVelocity);
-
-            //     // Apply velocity
-            //     rigidbody.velocity = velocity;
-
-            //     // Update rotation
-            //     transform.forward = rigidbody.velocity.normalized;
-
-            //     //rigidbody.AddForce(forceDir * 15);
-            //     oldForceDir = forceDir;
-                
-            // }  
-
             
         }
+
+
+        // Increase exhaustion of player as they move and reduce exhaustion when appropriate 
+        private void adjustExhaustion(){
+
+        }
+
+
+        // When two players collide
+        private void OnTriggerEnter(Collider other){
+            Debug.Log("something has collided");
+            
+            if (other.gameObject.CompareTag(player.team)){
+                //0.05 chance to result in one person unconscious
+                Debug.Log("players of same team collided");
+            }
+            else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
+                Debug.Log("diff team players collided");
+            }
+
+            // Check if players are on diff teams using tags
+
+            // double player1Value = player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (exhaustion / player.maxExhaustion));
+
+            // //double player2Value = otherObjectScript.player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (exhaustion / otherObjectScript.player.maxExhaustion));
+
+            // if (player1Value > player2Value){
+            //     //otherObject == unconscious
+            //     Debug.Log("player 1 wins");
+            // }
+            // else if (player2Value < player1Value){
+            //     //unconscious == true
+            //     Debug.Log("player 2 wins");
+            // }
+            // else{
+            //     //both unconscious
+            //     Debug.Log("nobody wins");
+            // }
+
+
+            // If players on the same team{}....
+
+        }
+
+
     }       
 }
