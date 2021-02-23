@@ -65,9 +65,9 @@ namespace Players{
                 rigidbody.AddForce(dir * dist);
             }
             // Stop moving if unconscious
-            else if(unconscious){
-                rigidbody.velocity = Vector3.zero;
-            }
+            //else if(unconscious){
+                //rigidbody.velocity = Vector3.zero;
+            //}
             
             adjustExhaustion();
 
@@ -139,18 +139,23 @@ namespace Players{
                 
                 // Compare who had the lower value 
                 if (player2Value > player1Value){
-                    unconscious = true;
+                    unconsciousTheMethod();
                     Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
                     + otherPlayerScriptable.team + " the losting team name: " + player.team);
                     Debug.Log(player.team + unconscious);
                 }
                 // Both players knocked out
                 else if (player2Value == player1Value){
-                    unconscious = true;
+                    unconsciousTheMethod();
                     Debug.Log("Ouch");
                 }
             }
 
+        }
+
+        private void unconsciousTheMethod(){
+            unconscious = true;
+            rigidbody.useGravity = true;
         }
 
 
