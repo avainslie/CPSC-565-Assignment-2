@@ -28,6 +28,9 @@ namespace Players{
         public GameObject snitch;
 
         public PlayerSettingsScriptable otherPlayerScriptable;
+
+        public GameObject otherPlayer;
+        private PlayerBehaviour otherPlayerScript;
         
         void Awake(){
 
@@ -43,6 +46,9 @@ namespace Players{
             aggressiveness = player.aggressiveness;
             maxExhaustion = player.maxExhaustion;
             exhaustion = 0f;
+
+            // https://answers.unity.com/questions/1141391/accessing-script-from-another-object.html
+            otherPlayerScript = GetComponent<PlayerBehaviour>();
 
         }
 
@@ -104,32 +110,44 @@ namespace Players{
         private void OnTriggerEnter(Collider other){
             Debug.Log("something has collided");
             
+            // Players from the same team collide
             if (other.gameObject.CompareTag(player.team)){
-                //0.05 chance to result in one person unconscious
                 Debug.Log("players of same team collided");
+                int val = (int)(rng.NextDouble()*100);
+                // Player with the highest exhaustion will become unconscious 5% of the time
+                if (exhaustion < otherPlayerScript.exhaustion){
+                    if(val > 95){
+                        unconscious = true;
+                    }
+                }
+                // Both have the same exhaustion, both become unconscious
+                else if (exhaustion == otherPlayerScript.exhaustion){
+                    unconscious = true;
+                }
+                
+
             }
+            // Players from opposing teams collide
             else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
                 Debug.Log("diff team players collided");
-
+                // Code from assignment description
                 double player1Value = player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) 
                 * (1 - (exhaustion / player.maxExhaustion));
 
                 double player2Value = otherPlayerScriptable.aggressiveness * (rng.NextDouble() * 
                 (1.2 - 0.8) + 0.8) * (1 - (exhaustion / otherPlayerScriptable.maxExhaustion));
-
-                if (player1Value > player2Value){
-                Debug.Log("message from: " + player.team+ "...p1 value greater than p2. The winning team name: " 
-                + player.team + " the losting team name: " + otherPlayerScriptable.team);
-                }
-                else if (player2Value > player1Value){
+                
+                // Compare who had the lower value 
+                if (player2Value > player1Value){
                     unconscious = true;
                     Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
                     + otherPlayerScriptable.team + " the losting team name: " + player.team);
                     Debug.Log(player.team + unconscious);
                 }
-                else{
+                // Both players knocked out
+                else if (player2Value == player1Value){
                     unconscious = true;
-                    Debug.Log("nobody wins");
+                    Debug.Log("Ouch");
                 }
             }
 
