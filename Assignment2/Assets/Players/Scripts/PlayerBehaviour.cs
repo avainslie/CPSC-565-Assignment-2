@@ -24,7 +24,6 @@ namespace Players{
         private float maxExhaustion;
         private float exhaustion;
 
-
         public GameObject snitch;
 
         public PlayerSettingsScriptable otherPlayerScriptable;
@@ -102,6 +101,14 @@ namespace Players{
 
         }
 
+        // Create
+        private void createPlayer(){
+           float u1 = (float) (1.0 - rng.NextDouble());
+           float u2 = (float) (1.0 - rng.NextDouble());
 
-    }       
+           float randStdNormal = (float) (Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2));
+
+           float randNormal = (float) (player.weight + player.weightStdDev * randStdNormal);
+        } 
+    }      
 }

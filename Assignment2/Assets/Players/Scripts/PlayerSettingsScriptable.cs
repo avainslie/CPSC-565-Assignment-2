@@ -15,14 +15,26 @@ namespace Players{
         [Tooltip("The weight of the players. Affects momentum")]
         [SerializeField] public float weight = 80f;
 
+        [Tooltip("The stdDev weight of the players. Affects momentum")]
+        [SerializeField] public float weightStdDev = 15f;
+
         [Tooltip("The max speed the players can obtain.")]
         [SerializeField] public float maxVelocity = 25f;
+
+        [Tooltip("The max speed the players can obtain.")]
+        [SerializeField] public float maxVelocityStdDev = 2f;
 
         [Tooltip("How forceful players are. Affects if they become unconscious upon collision with another player.")]
         [SerializeField] public float aggressiveness = 25f;
 
+        [Tooltip("How forceful players are. Affects if they become unconscious upon collision with another player.")]
+        [SerializeField] public float aggressivenessStdDev = 5f;
+
         [Tooltip("How tired players can become before needing to rest.")]
         [SerializeField] public float maxExhaustion = 55f;
+
+        [Tooltip("How tired players can become before needing to rest.")]
+        [SerializeField] public float maxExhaustionStdDev = 14f;
         
     }
 }
