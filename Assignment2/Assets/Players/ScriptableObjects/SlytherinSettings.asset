@@ -15,5 +15,5 @@ MonoBehaviour:
   team: Slytherin
   weight: 85
   maxVelocity: 16
-  aggressiveness: 0
+  aggressiveness: 30
   maxExhaustion: 50
