@@ -23,6 +23,7 @@ namespace Players{
         private float aggressiveness;
         private float maxExhaustion;
         private float exhaustion;
+
         private bool unconscious;
 
         public GameObject snitch;
@@ -152,12 +153,19 @@ namespace Players{
             }
 
         }
-
         private void unconsciousTheMethod(){
             unconscious = true;
             rigidbody.useGravity = true;
         }
 
+        // Create
+        private void createPlayer(){
+           float u1 = (float) (1.0 - rng.NextDouble());
+           float u2 = (float) (1.0 - rng.NextDouble());
 
-    }       
+           float randStdNormal = (float) (Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2));
+
+           float randNormal = (float) (player.weight + player.weightStdDev * randStdNormal);
+        } 
+    }      
 }
