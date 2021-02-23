@@ -15,5 +15,5 @@ MonoBehaviour:
   team: Gryffindor
   weight: 75
   maxVelocity: 18
-  aggressiveness: 22
+  aggressiveness: 122
   maxExhaustion: 65

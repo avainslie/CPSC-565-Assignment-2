@@ -77,29 +77,28 @@ namespace Players{
             }
             else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
                 Debug.Log("diff team players collided");
+
+                double player1Value = player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) 
+                * (1 - (exhaustion / player.maxExhaustion));
+
+                double player2Value = otherPlayerScriptable.aggressiveness * (rng.NextDouble() * 
+                (1.2 - 0.8) + 0.8) * (1 - (exhaustion / otherPlayerScriptable.maxExhaustion));
+
+                if (player1Value > player2Value){
+                //otherObject == unconscious
+                Debug.Log("message from: " + player.team+ "...p1 value greater than p2. The winning team name: " 
+                + player.team + " the losting team name: " + otherPlayerScriptable.team);
+                }
+                else if (player2Value > player1Value){
+                    //unconscious == true
+                    Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
+                    + otherPlayerScriptable.team + " the losting team name: " + player.team);
+                }
+                else{
+                    //both unconscious
+                    Debug.Log("nobody wins");
+                }
             }
-
-            // Check if players are on diff teams using tags
-
-            // double player1Value = player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (exhaustion / player.maxExhaustion));
-
-            // //double player2Value = otherObjectScript.player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) * (1 - (exhaustion / otherObjectScript.player.maxExhaustion));
-
-            // if (player1Value > player2Value){
-            //     //otherObject == unconscious
-            //     Debug.Log("player 1 wins");
-            // }
-            // else if (player2Value < player1Value){
-            //     //unconscious == true
-            //     Debug.Log("player 2 wins");
-            // }
-            // else{
-            //     //both unconscious
-            //     Debug.Log("nobody wins");
-            // }
-
-
-            // If players on the same team{}....
 
         }
 
