@@ -6,10 +6,13 @@ namespace Players{
     public class PlayerBehaviour : MonoBehaviour
     {
         #region Variables and fields
+        
 
         // Can be set by user
         [SerializeField] private int seed;
 
+
+        [SerializeField] private float velocity;
         [SerializeField] private Vector3 snitchPos; // for debugging purposes
         [SerializeField] private float exhaustion;
         [SerializeField] private bool unconscious;
@@ -80,10 +83,20 @@ namespace Players{
             // Only apply force if player is not unconscious
             if (!unconscious){
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
+                // Restrict top speed to MaxVelocity
+                dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
+                Vector3 c = ComputeCollisionAvoidanceForce();
+                //dir += c;
+                c = c * 15;
                 // Vector3 times a float
-                rigidbody.AddForce(dir * dist);
+                //rigidbody.AddForce((dir+c) * dist);
+                rigidbody.velocity = (dir + c);
+                transform.forward = rigidbody.velocity.normalized;
+
+                velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
+                
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
             }            
             adjustExhaustion(); 
@@ -215,6 +228,37 @@ namespace Players{
 
            return randNormal;
         } 
+
+
+        // Taken from CPSC 565 Lecture 10 - Omar's boid code 
+        // https://github.com/omaddam/Boids-Simulation/blob/develop/Assets/Boids/Scripts/Bird.cs 
+        // private Vector3 ComputeSeperationForce(){
+        //     // Initialize seperation force
+        //     Vector3 force = Vector3.zero;
+
+        //     // Find nearby birds
+        //     foreach (Bird bird in Flock.Birds)
+        //     {
+        //         if (bird == this || (bird.transform.position - transform.position).magnitude > Flock.FlockSettings.SeperationRadiusThreshold)
+        //             continue;
+
+        //         // Repel away
+        //         force += transform.position - bird.transform.position;
+        //     }
+
+        //     return force;
+        // }
+
+        private Vector3 ComputeCollisionAvoidanceForce()
+        {
+            // Check if heading to collision
+            // "out" forces variable to be passed by reference
+            if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1))
+                return Vector3.zero;
+
+            // Compute force
+            return transform.position - hitInfo.point;
+        }
 
         #endregion
     }      
