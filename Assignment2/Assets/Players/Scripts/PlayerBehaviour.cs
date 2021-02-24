@@ -5,6 +5,8 @@ using UnityEngine;
 namespace Players{
     public class PlayerBehaviour : MonoBehaviour
     {
+        #region Variables and fields
+
         // Can be set by user
         [SerializeField] private int seed;
 
@@ -37,6 +39,10 @@ namespace Players{
         private Rigidbody rigidbody;
         private System.Random steadyR; 
         private System.Random changingR;
+
+        #endregion
+
+        #region Unity Methods
 
         void Awake(){
 
@@ -79,17 +85,13 @@ namespace Players{
                 // Vector3 times a float
                 rigidbody.AddForce(dir * dist);
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
-            }
-            // Stop moving if unconscious
-            else if(unconscious){
-                rigidbody.velocity = Vector3.zero;
-            }
-            
-            //adjustExhaustion();
-
+            }            
+            adjustExhaustion(); 
             
         }
+        #endregion
 
+        #region Custom Methods
 
         // Increase exhaustion of player as they move and reduce exhaustion when appropriate 
         // Sources: 
@@ -116,11 +118,10 @@ namespace Players{
             
             // Check if exhaustion is at the max
             if (exhaustion >= player.maxExhaustion){
-                //unconsciousTheMethod()
+                StartCoroutine(unconsciousTheMethod());
                 Debug.Log("player from team "+player.team+" is unconscious!");
             }
         }
-
 
         // When two players collide
         private void OnTriggerEnter(Collider other){
@@ -133,16 +134,15 @@ namespace Players{
                 // Player with the highest exhaustion will become unconscious 5% of the time
                 if (exhaustion < otherPlayerScript.exhaustion){
                     if(val > 95){
-                        //unconsciousTheMethod()
+                        StartCoroutine(unconsciousTheMethod());
                     }
                 }
                 // Both have the same exhaustion, both become unconscious
                 else if (exhaustion == otherPlayerScript.exhaustion){
-                    //unconsciousTheMethod()
+                    StartCoroutine(unconsciousTheMethod());
                 }
-                
-
             }
+
             // Players from opposing teams collide
             else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
                 Debug.Log("diff team players collided");
@@ -155,27 +155,55 @@ namespace Players{
                 
                 // Compare who had the lower value 
                 if (player2Value > player1Value){
-                    //unconsciousTheMethod();
+                    StartCoroutine(unconsciousTheMethod());
                     Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
                     + otherPlayerScriptable.team + " the losting team name: " + player.team);
                     Debug.Log(player.team + unconscious);
                 }
                 // Both players knocked out
                 else if (player2Value == player1Value){
-                    //unconsciousTheMethod();
+                    StartCoroutine(unconsciousTheMethod());
                     Debug.Log("Ouch");
                 }
             }
+        }
+
+        // When players are unconscious collide with ground and go back to start pos
+        // https://stackoverflow.com/questions/30056471/how-to-make-the-script-wait-sleep-in-a-simple-way-in-unity 
+        private IEnumerator unconsciousTheMethod(){
+            
+            part1();
+
+            yield return new WaitForSeconds(10);
+    
+           part2();
 
         }
-        private void unconsciousTheMethod(){
+
+        private void part1(){
             unconscious = true;
+            rigidbody.velocity = Vector3.zero;
             rigidbody.useGravity = true;
+            if (tag.Equals("Gryffindor")){
+                rigidbody.position = new Vector3(10, 1.3f, 0);
+            }
+            else if(tag.Equals("Slytherin")){
+                rigidbody.position = new Vector3(-10, 1.3f, 0);
+            }
+
         }
+
+        private void part2(){
+            unconscious = false;
+            rigidbody.useGravity = false;
+        }
+
+
 
         // https://stackoverflow.com/questions/218060/random-gaussian-variables 
         private float createPlayer(float mean, float std){
             // Reset random for variability 
+            // https://answers.unity.com/questions/603000/generating-a-good-random-seed.html 
             changingR = new System.Random((int) System.DateTime.Now.Ticks);
 
            float u1 = (float) (1.0 - changingR.NextDouble());
@@ -184,8 +212,10 @@ namespace Players{
            float randStdNormal = (float) (Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2));
 
            float randNormal = (float) (mean + std * randStdNormal);
-           
+
            return randNormal;
         } 
+
+        #endregion
     }      
 }
