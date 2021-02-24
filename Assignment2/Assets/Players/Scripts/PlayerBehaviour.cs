@@ -8,44 +8,40 @@ namespace Players{
 
         // Can be set by user
         [SerializeField] private int seed;
-        [SerializeField] private float minVelocity;
-        [SerializeField] private int speed;
-        
 
+        [SerializeField] private Vector3 snitchPos; // for debugging purposes
+        [SerializeField] private float exhaustion;
+        [SerializeField] private bool unconscious;
+
+        public PlayerSettingsScriptable player;
+        public GameObject snitch;
+        public PlayerSettingsScriptable otherPlayerScriptable;
+        public GameObject otherPlayer;
+        
         private Rigidbody rigidbody;
         private Vector3 oldForceDir;
         private System.Random rng;
         private float maxHeight;
         private float minHeight;
-        public PlayerSettingsScriptable player;
-        private float mass;
-        private float maxVelocity;
-        private float aggressiveness;
-        private float maxExhaustion;
-        private float exhaustion;
-
-        private bool unconscious;
-
-        public GameObject snitch;
-
-        public PlayerSettingsScriptable otherPlayerScriptable;
-
-        public GameObject otherPlayer;
         private PlayerBehaviour otherPlayerScript;
+        private Transform parentTransform;
+
         
         void Awake(){
 
             // Set rigid body to the one on the player in the scene
             rigidbody = GetComponent<Rigidbody>();
 
+
+            // For pivot point
+            parentTransform = this.transform.parent.transform;
+
+            // transform look at
+
             rng = new System.Random(seed);  
 
             oldForceDir = Vector3.up * 5;
 
-            mass = player.weight;
-            maxVelocity = player.maxVelocity;
-            aggressiveness = player.aggressiveness;
-            maxExhaustion = player.maxExhaustion;
             exhaustion = 0f;
 
             // https://answers.unity.com/questions/1141391/accessing-script-from-another-object.html
@@ -53,24 +49,32 @@ namespace Players{
 
         }
 
+        // Spawn team
+        void Start(){
+            createPlayer();
+            Debug.Log("I AM ALIVE AND HERE");
+        }
+
         // Update is called once per frame
         // Taken and modified from CPSC 565 - Lecture 8
         void Update()
         {
+            snitchPos = snitch.transform.position;
             // Only apply force if player is not unconscious
-            if (!unconscious){
+            //if (!unconscious){
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
                 // Vector3 times a float
                 rigidbody.AddForce(dir * dist);
-            }
+                parentTransform.rotation = Quaternion.LookRotation(dir);
+            //}
             // Stop moving if unconscious
             //else if(unconscious){
                 //rigidbody.velocity = Vector3.zero;
             //}
             
-            adjustExhaustion();
+            //adjustExhaustion();
 
             
         }
@@ -101,7 +105,7 @@ namespace Players{
             
             // Check if exhaustion is at the max
             if (exhaustion >= player.maxExhaustion){
-                unconscious = true;
+                //unconsciousTheMethod()
                 Debug.Log("player from team "+player.team+" is unconscious!");
             }
         }
@@ -109,7 +113,7 @@ namespace Players{
 
         // When two players collide
         private void OnTriggerEnter(Collider other){
-            Debug.Log("something has collided");
+            //Debug.Log("something has collided");
             
             // Players from the same team collide
             if (other.gameObject.CompareTag(player.team)){
@@ -118,12 +122,12 @@ namespace Players{
                 // Player with the highest exhaustion will become unconscious 5% of the time
                 if (exhaustion < otherPlayerScript.exhaustion){
                     if(val > 95){
-                        unconscious = true;
+                        //unconsciousTheMethod()
                     }
                 }
                 // Both have the same exhaustion, both become unconscious
                 else if (exhaustion == otherPlayerScript.exhaustion){
-                    unconscious = true;
+                    //unconsciousTheMethod()
                 }
                 
 
@@ -140,14 +144,14 @@ namespace Players{
                 
                 // Compare who had the lower value 
                 if (player2Value > player1Value){
-                    unconsciousTheMethod();
+                    //unconsciousTheMethod();
                     Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
                     + otherPlayerScriptable.team + " the losting team name: " + player.team);
                     Debug.Log(player.team + unconscious);
                 }
                 // Both players knocked out
                 else if (player2Value == player1Value){
-                    unconsciousTheMethod();
+                    //unconsciousTheMethod();
                     Debug.Log("Ouch");
                 }
             }
@@ -166,6 +170,8 @@ namespace Players{
            float randStdNormal = (float) (Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2));
 
            float randNormal = (float) (player.weight + player.weightStdDev * randStdNormal);
+
+           Debug.Log("The weight of "+player.team+" is: " + randNormal);
         } 
     }      
 }

@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects:GryffindorSettingsScriptable
   team: Gryffindor
   weight: 75
+  weightStdDev: 12
   maxVelocity: 18
+  maxVelocityStdDev: 2
   aggressiveness: 22
+  aggressivenessStdDev: 3
   maxExhaustion: 65
+  maxExhaustionStdDev: 13

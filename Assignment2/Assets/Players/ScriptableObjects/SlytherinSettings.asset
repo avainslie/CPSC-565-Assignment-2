@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects:GryffindorSettingsScriptable
   team: Slytherin
   weight: 85
+  weightStdDev: 17
   maxVelocity: 16
+  maxVelocityStdDev: 2
   aggressiveness: 30
+  aggressivenessStdDev: 7
   maxExhaustion: 50
+  maxExhaustionStdDev: 15
