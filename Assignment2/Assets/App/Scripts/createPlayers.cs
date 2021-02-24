@@ -4,13 +4,12 @@ using UnityEngine;
 namespace Players{
     public class createPlayers : MonoBehaviour
     {
-
         public GameObject prefabG;
         public GameObject prefabS;
         public GameObject snitch;
 
-
         // Start is called before the first frame update
+        // https://docs.unity3d.com/Manual/InstantiatingPrefabs.html 
         void Start()
         {
             // Instantiate players at a predetermined position and zero rotation.
@@ -18,12 +17,12 @@ namespace Players{
             for (int i = 0; i < 5; i ++){
 
                 // Gryffindor players
-                GameObject g = Instantiate(prefabG, new Vector3(3, 0, 0), Quaternion.identity);
+                GameObject g = Instantiate(prefabG, new Vector3(10, 1.3f, 0), Quaternion.identity);
                 g.GetComponent<PlayerBehaviour>().snitch = this.snitch;
 
 
                 // Slytherin players
-                GameObject s = Instantiate(prefabS, new Vector3(-3, 0, 0), Quaternion.identity);
+                GameObject s = Instantiate(prefabS, new Vector3(-10, 1.3f, 0), Quaternion.identity);
                 s.GetComponent<PlayerBehaviour>().snitch = this.snitch;
             
             }

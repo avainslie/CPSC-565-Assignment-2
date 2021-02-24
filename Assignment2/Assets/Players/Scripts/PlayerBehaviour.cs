@@ -5,42 +5,51 @@ using UnityEngine;
 namespace Players{
     public class PlayerBehaviour : MonoBehaviour
     {
-
         // Can be set by user
         [SerializeField] private int seed;
 
         [SerializeField] private Vector3 snitchPos; // for debugging purposes
         [SerializeField] private float exhaustion;
         [SerializeField] private bool unconscious;
+        [SerializeField] private float weight;
+        [SerializeField] private float maxVelocity;
+        [SerializeField] private float aggressiveness;
+        [SerializeField] private float maxExhaustion;
 
+        // Scriptable object holding settings for the player this PlayerBehaviour script is on
         public PlayerSettingsScriptable player;
-        public GameObject snitch;
+
+        // Scriptable object holding settings for other players this player may bump into
         public PlayerSettingsScriptable otherPlayerScriptable;
+
+        // Reference to the PlayerBehaviour script on other players this player may bump into
+        private PlayerBehaviour otherPlayerScript;
+
+        // Reference to another player this player may bump into
         public GameObject otherPlayer;
+
+        // Reference to the snitch
+        public GameObject snitch;
+
+        // 
+        private Transform parentTransform;
         
         private Rigidbody rigidbody;
-        private Vector3 oldForceDir;
-        private System.Random rng;
-        private float maxHeight;
-        private float minHeight;
-        private PlayerBehaviour otherPlayerScript;
-        private Transform parentTransform;
+        private System.Random steadyR; 
+        private System.Random changingR;
 
-        
         void Awake(){
 
             // Set rigid body to the one on the player in the scene
             rigidbody = GetComponent<Rigidbody>();
 
-
             // For pivot point
-            parentTransform = this.transform.parent.transform;
+            //parentTransform = this.transform.parent.transform;
 
             // transform look at
 
-            rng = new System.Random(seed);  
-
-            oldForceDir = Vector3.up * 5;
+            steadyR = new System.Random(seed);  
+            changingR = new System.Random();
 
             exhaustion = 0f;
 
@@ -51,8 +60,10 @@ namespace Players{
 
         // Spawn team
         void Start(){
-            createPlayer();
-            Debug.Log("I AM ALIVE AND HERE");
+            weight = createPlayer(player.weight, player.weightStdDev);
+            maxVelocity = createPlayer(player.maxVelocity, player.maxVelocityStdDev);
+            aggressiveness = createPlayer(player.aggressiveness, player.aggressivenessStdDev);
+            maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
         }
 
         // Update is called once per frame
@@ -61,18 +72,18 @@ namespace Players{
         {
             snitchPos = snitch.transform.position;
             // Only apply force if player is not unconscious
-            //if (!unconscious){
+            if (!unconscious){
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
                 // Vector3 times a float
                 rigidbody.AddForce(dir * dist);
-                parentTransform.rotation = Quaternion.LookRotation(dir);
-            //}
+                //parentTransform.rotation = Quaternion.LookRotation(dir);
+            }
             // Stop moving if unconscious
-            //else if(unconscious){
-                //rigidbody.velocity = Vector3.zero;
-            //}
+            else if(unconscious){
+                rigidbody.velocity = Vector3.zero;
+            }
             
             //adjustExhaustion();
 
@@ -118,7 +129,7 @@ namespace Players{
             // Players from the same team collide
             if (other.gameObject.CompareTag(player.team)){
                 Debug.Log("players of same team collided");
-                int val = (int)(rng.NextDouble()*100);
+                int val = (int)(steadyR.NextDouble()*100);
                 // Player with the highest exhaustion will become unconscious 5% of the time
                 if (exhaustion < otherPlayerScript.exhaustion){
                     if(val > 95){
@@ -136,10 +147,10 @@ namespace Players{
             else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
                 Debug.Log("diff team players collided");
                 // Code from assignment description
-                double player1Value = player.aggressiveness * (rng.NextDouble() * (1.2 - 0.8) + 0.8) 
+                double player1Value = player.aggressiveness * (steadyR.NextDouble() * (1.2 - 0.8) + 0.8) 
                 * (1 - (exhaustion / player.maxExhaustion));
 
-                double player2Value = otherPlayerScriptable.aggressiveness * (rng.NextDouble() * 
+                double player2Value = otherPlayerScriptable.aggressiveness * (steadyR.NextDouble() * 
                 (1.2 - 0.8) + 0.8) * (1 - (exhaustion / otherPlayerScriptable.maxExhaustion));
                 
                 // Compare who had the lower value 
@@ -162,16 +173,19 @@ namespace Players{
             rigidbody.useGravity = true;
         }
 
-        // Create
-        private void createPlayer(){
-           float u1 = (float) (1.0 - rng.NextDouble());
-           float u2 = (float) (1.0 - rng.NextDouble());
+        // https://stackoverflow.com/questions/218060/random-gaussian-variables 
+        private float createPlayer(float mean, float std){
+            // Reset random for variability 
+            changingR = new System.Random((int) System.DateTime.Now.Ticks);
+
+           float u1 = (float) (1.0 - changingR.NextDouble());
+           float u2 = (float) (1.0 - changingR.NextDouble());
 
            float randStdNormal = (float) (Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2));
 
-           float randNormal = (float) (player.weight + player.weightStdDev * randStdNormal);
-
-           Debug.Log("The weight of "+player.team+" is: " + randNormal);
+           float randNormal = (float) (mean + std * randStdNormal);
+           
+           return randNormal;
         } 
     }      
 }
