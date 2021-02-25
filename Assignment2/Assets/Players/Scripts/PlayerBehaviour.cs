@@ -93,7 +93,7 @@ namespace Players{
                 // Vector3 times a float
                 //rigidbody.AddForce((dir+c) * dist);
                 rigidbody.velocity = (dir + c);
-                transform.forward = rigidbody.velocity.normalized;
+                transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
                 velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
                 
