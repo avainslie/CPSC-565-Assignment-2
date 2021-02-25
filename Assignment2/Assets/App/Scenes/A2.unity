@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 37104858}
   m_Layer: 0
   m_Name: Snitch
-  m_TagString: Untagged
+  m_TagString: Snitch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 494776293}
   m_Layer: 0
   m_Name: Snitch
-  m_TagString: Untagged
+  m_TagString: Snitch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1207,7 +1207,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 119
+  field of view: 97
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1369,7 +1369,7 @@ PrefabInstance:
     - target: {fileID: 5899829286731667453, guid: ee7c1d195c3db4c93af411fb0793494a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5899829286731667453, guid: ee7c1d195c3db4c93af411fb0793494a,
         type: 3}
@@ -1529,7 +1529,7 @@ PrefabInstance:
     - target: {fileID: 6245008087223894566, guid: e2d39216b19d0464fbe6238c59c7e657,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6245008087223894566, guid: e2d39216b19d0464fbe6238c59c7e657,
         type: 3}

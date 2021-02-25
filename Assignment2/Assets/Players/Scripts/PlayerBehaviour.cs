@@ -82,17 +82,16 @@ namespace Players{
             snitchPos = snitch.transform.position;
             // Only apply force if player is not unconscious
             if (!unconscious){
+
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
+
                 // Restrict top speed to MaxVelocity
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
-                Vector3 c = ComputeCollisionAvoidanceForce();
-                //dir += c;
-                c = c * 15;
-                // Vector3 times a float
-                //rigidbody.AddForce((dir+c) * dist);
-                rigidbody.velocity = (dir + c);
+                Vector3 c = ComputeCollisionAvoidanceForce() * 15;
+
+                rigidbody.velocity = (dir + c) * 5;
                 transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
                 velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
@@ -232,32 +231,20 @@ namespace Players{
 
         // Taken from CPSC 565 Lecture 10 - Omar's boid code 
         // https://github.com/omaddam/Boids-Simulation/blob/develop/Assets/Boids/Scripts/Bird.cs 
-        // private Vector3 ComputeSeperationForce(){
-        //     // Initialize seperation force
-        //     Vector3 force = Vector3.zero;
-
-        //     // Find nearby birds
-        //     foreach (Bird bird in Flock.Birds)
-        //     {
-        //         if (bird == this || (bird.transform.position - transform.position).magnitude > Flock.FlockSettings.SeperationRadiusThreshold)
-        //             continue;
-
-        //         // Repel away
-        //         force += transform.position - bird.transform.position;
-        //     }
-
-        //     return force;
-        // }
-
         private Vector3 ComputeCollisionAvoidanceForce()
         {
             // Check if heading to collision
             // "out" forces variable to be passed by reference
-            if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1))
+            if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1, 1 << ~LayerMask.NameToLayer("Snitch"))){
                 return Vector3.zero;
-
+            }
             // Compute force
-            return transform.position - hitInfo.point;
+            else{
+                return transform.position - hitInfo.point; 
+            }
+                
+            
+            
         }
 
         #endregion

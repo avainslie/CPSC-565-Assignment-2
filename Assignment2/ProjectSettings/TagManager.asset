@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Gryffindor
   - Slytherin
+  - Snitch
   layers:
   - Default
   - TransparentFX
