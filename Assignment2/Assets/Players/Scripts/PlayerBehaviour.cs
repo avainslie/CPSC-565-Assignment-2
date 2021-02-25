@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Players{
     public class PlayerBehaviour : MonoBehaviour
@@ -30,11 +31,10 @@ namespace Players{
         // Reference to the PlayerBehaviour script on other players this player may bump into
         private PlayerBehaviour otherPlayerScript;
 
-        // Reference to another player this player may bump into
-        public GameObject otherPlayer;
-
         // Reference to the snitch
         public GameObject snitch;
+
+        public Score score;
 
         // 
         private Transform parentTransform;
@@ -73,6 +73,7 @@ namespace Players{
             maxVelocity = createPlayer(player.maxVelocity, player.maxVelocityStdDev);
             aggressiveness = createPlayer(player.aggressiveness, player.aggressivenessStdDev);
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
+            
         }
 
         // Update is called once per frame
@@ -178,6 +179,13 @@ namespace Players{
                     Debug.Log("Ouch");
                 }
             }
+            else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
+                score.increaseScoreG();
+            }
+            else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
+                score.increaseScoreS();
+            }
+
         }
 
         // When players are unconscious collide with ground and go back to start pos
@@ -241,10 +249,7 @@ namespace Players{
             // Compute force
             else{
                 return transform.position - hitInfo.point; 
-            }
-                
-            
-            
+            } 
         }
 
         #endregion
