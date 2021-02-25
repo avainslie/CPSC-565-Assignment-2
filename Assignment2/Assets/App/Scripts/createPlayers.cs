@@ -9,7 +9,7 @@ namespace Players{
         public GameObject snitch;
 
         // Start is called before the first frame update
-        // https://docs.unity3d.com/Manual/InstantiatingPrefabs.html 
+        //https://docs.unity3d.com/Manual/InstantiatingPrefabs.html 
         void Start()
         {
             float z = -10;

@@ -49,12 +49,12 @@ namespace Players{
         }
 
         private bool win(){
-            if (countG == 21){
+            if (countG == 20){
                 whoWon.text = "Gryffindor won!!";
                 gameOver = true;
                 return true;
             }
-            else if (countS == 21){
+            else if (countS == 20){
                 whoWon.text = "Slytherin won!!";
                 gameOver = true;
                 return true;

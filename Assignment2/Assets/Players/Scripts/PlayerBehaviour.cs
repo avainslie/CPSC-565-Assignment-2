@@ -80,7 +80,8 @@ namespace Players{
         // Taken and modified from CPSC 565 - Lecture 8
         void Update()
         {
-            snitchPos = snitch.transform.position;
+            snitchPos = snitch.transform.position; // FOR DEBUGGING
+
             // Only apply force if player is not unconscious
             if (!unconscious){
 
@@ -99,7 +100,7 @@ namespace Players{
                 
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
             }            
-            adjustExhaustion(); 
+            adjustExhaustion(velocity); 
             
         }
         #endregion
@@ -110,30 +111,29 @@ namespace Players{
         // Sources: 
         // https://answers.unity.com/questions/23992/current-speed-of-an-object.html
         // https://answers.unity.com/questions/341314/how-to-deplete-health-every-second.html 
-        private void adjustExhaustion(){
-
-            // Current velocity in Vector3 format and then float
-            Vector3 velo = rigidbody.velocity;
-            float magVelo = velo.magnitude;
+        private void adjustExhaustion(float v){
 
             // If player is moving quickly make them more tired
-            if (magVelo <= player.maxVelocity && magVelo > (player.maxVelocity / 2)){
+            if (v <= maxVelocity && v > (maxVelocity / 2)){
                 exhaustion += 1 * Time.deltaTime;
-                
-                //Debug.Log("exhaustion at higher speed is : "+exhaustion);
             }
             // Slower movement makes them less tired
-            else{
-                exhaustion += 0.5f * Time.deltaTime;
-                
-                //Debug.Log("exhaustion at lower speed is : "+exhaustion);
+            else{ exhaustion += 0.5f * Time.deltaTime; }
+
+            if (exhaustion >= (maxExhaustion - 5)){
+                StartCoroutine(rest());
             }
             
             // Check if exhaustion is at the max
-            if (exhaustion >= player.maxExhaustion){
+            if (exhaustion >= maxExhaustion){
                 StartCoroutine(unconsciousTheMethod());
-                Debug.Log("player from team "+player.team+" is unconscious!");
             }
+        }
+
+        private IEnumerator rest(){
+            rigidbody.velocity = Vector3.zero;
+            yield return new WaitForSeconds(3);
+            exhaustion = 0;
         }
 
         // When two players collide

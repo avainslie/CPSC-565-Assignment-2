@@ -70,7 +70,6 @@ public class CameraControls : MonoBehaviour
         Vector3 newPosition = transform.position;
 
         // Only moves the x and z
-        // ???? Doesn't work
         if (Input.GetKey(KeyCode.Space)){
             transform.Translate(p);
             newPosition.x = transform.position.x;
