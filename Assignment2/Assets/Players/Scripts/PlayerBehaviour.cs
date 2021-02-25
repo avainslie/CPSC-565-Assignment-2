@@ -94,7 +94,7 @@ namespace Players{
                 Vector3 c = ComputeCollisionAvoidanceForce() * 15;
 
                 rigidbody.velocity = (dir + c) * 5;
-                transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
                 velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
                 
