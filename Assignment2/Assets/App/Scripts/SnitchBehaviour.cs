@@ -55,18 +55,11 @@ namespace snitch
         // TODO: make it so snitch gradually comes up, not just starts floating
         void Start()
         {
-
             // Make snitch move up first before moving randomly
             transform.Translate(oldForceDir);
 
-
-            
-            
-
             // Set rigid body to the one on the snitch in the scene
-            rigidbody = GetComponent<Rigidbody>();
-
-            
+            rigidbody = GetComponent<Rigidbody>(); 
 
         }
 

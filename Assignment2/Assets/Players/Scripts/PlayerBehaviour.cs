@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Players{
     public class PlayerBehaviour : MonoBehaviour
     {
         #region Variables and fields
+        
 
         // Can be set by user
         [SerializeField] private int seed;
 
+
+        [SerializeField] private float velocity;
         [SerializeField] private Vector3 snitchPos; // for debugging purposes
         [SerializeField] private float exhaustion;
         [SerializeField] private bool unconscious;
@@ -27,11 +31,10 @@ namespace Players{
         // Reference to the PlayerBehaviour script on other players this player may bump into
         private PlayerBehaviour otherPlayerScript;
 
-        // Reference to another player this player may bump into
-        public GameObject otherPlayer;
-
         // Reference to the snitch
         public GameObject snitch;
+
+        public Score score;
 
         // 
         private Transform parentTransform;
@@ -70,6 +73,7 @@ namespace Players{
             maxVelocity = createPlayer(player.maxVelocity, player.maxVelocityStdDev);
             aggressiveness = createPlayer(player.aggressiveness, player.aggressivenessStdDev);
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
+            
         }
 
         // Update is called once per frame
@@ -79,11 +83,20 @@ namespace Players{
             snitchPos = snitch.transform.position;
             // Only apply force if player is not unconscious
             if (!unconscious){
+
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
+
+                // Restrict top speed to MaxVelocity
+                dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
-                // Vector3 times a float
-                rigidbody.AddForce(dir * dist);
+                Vector3 c = ComputeCollisionAvoidanceForce() * 15;
+
+                rigidbody.velocity = (dir + c) * 5;
+                transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+
+                velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
+                
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
             }            
             adjustExhaustion(); 
@@ -166,6 +179,13 @@ namespace Players{
                     Debug.Log("Ouch");
                 }
             }
+            else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
+                score.increaseScoreG();
+            }
+            else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
+                score.increaseScoreS();
+            }
+
         }
 
         // When players are unconscious collide with ground and go back to start pos
@@ -215,6 +235,22 @@ namespace Players{
 
            return randNormal;
         } 
+
+
+        // Taken from CPSC 565 Lecture 10 - Omar's boid code 
+        // https://github.com/omaddam/Boids-Simulation/blob/develop/Assets/Boids/Scripts/Bird.cs 
+        private Vector3 ComputeCollisionAvoidanceForce()
+        {
+            // Check if heading to collision
+            // "out" forces variable to be passed by reference
+            if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1, 1 << ~LayerMask.NameToLayer("Snitch"))){
+                return Vector3.zero;
+            }
+            // Compute force
+            else{
+                return transform.position - hitInfo.point; 
+            } 
+        }
 
         #endregion
     }      
