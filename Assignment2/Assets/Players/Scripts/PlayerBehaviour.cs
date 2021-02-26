@@ -213,12 +213,11 @@ namespace Players{
             rigidbody.velocity = Vector3.zero;
             rigidbody.useGravity = true;
             if (tag.Equals("Gryffindor")){
-                rigidbody.position = new Vector3(10, 1.3f, 0);
+                rigidbody.position = new Vector3(10, 1.3f, (float)(Random.Range(-10f,10f)));
             }
             else if(tag.Equals("Slytherin")){
-                rigidbody.position = new Vector3(-10, 1.3f, 0);
+                rigidbody.position = new Vector3(-10, 1.3f, (float)(Random.Range(-10f,10f)));
             }
-
         }
 
         private void part2(){
