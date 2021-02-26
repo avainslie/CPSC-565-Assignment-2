@@ -15,6 +15,7 @@ namespace snitch
         private Rigidbody rigidbody;
         private System.Random rng;
         private Vector3 oldForceDir;
+        private Vector3 forceDir;
         private bool liftOff;
         private float maxHeight;
         private float minHeight;
@@ -49,70 +50,49 @@ namespace snitch
             mass = 5f;
 
             liftOff = false;
+
+            // NextDouble returns random float between 0.0 and 1.0, do math to get values between -1.0 and 1.0
+            // Taken from CPSC 565 - Lecture 8
+            forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
+
+            
+
         }
 
         // Start is called before the first frame update
         // TODO: make it so snitch gradually comes up, not just starts floating
         void Start()
-        {
-            // Make snitch move up first before moving randomly
-            transform.Translate(oldForceDir);
+        {   
 
             // Set rigid body to the one on the snitch in the scene
             rigidbody = GetComponent<Rigidbody>(); 
 
+            //Vector3 velocity = rigidbody.velocity;
+            // Ensure the velocity remains within the accepted range
+            //velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
+                //minVelocity, maxVelocity);
+
+            // Move up and then randomly at the start of the game
+            rigidbody.AddForce(oldForceDir * 15, ForceMode.Force);
+            rigidbody.AddForce(forceDir * 15, ForceMode.Force);
         }
 
     
 
         // Update is called once per frame
-        void Update()
-        {
-            // https://answers.unity.com/questions/1606295/transformrotate-doesnt-work-inside-start-method.html
-            // if (!liftOff){
-            //     if (rng.NextDouble() < 0.5){ transform.Rotate(Vector3.right * Time.deltaTime * 400); }
-            //     else{ transform.Rotate(Vector3.left * Time.deltaTime * 300); } 
-                
-            //     //rigidbody.AddForce(transform.TransformDirection(oldForceDir) * 20);
-            //     liftOff = true;
-            // }
-
-
-            //// A little weird movement, but random and fairly quick (can be sped up...more jerky at faster speeds)
-
-            // NextDouble returns random float between 0.0 and 1.0, do math to get values between -1.0 and 1.0
-            // Taken from CPSC 565 - Lecture 8
-            Vector3 forceDir = new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1);
-
-            // Add the random Vector3 to the snitch's physics if it was not the last move the snitch made
-            // Inspired by Omar's code 
-            // https://github.com/omaddam/Boids-Simulation/blob/develop/Assets/Boids/Scripts/Bird.cs
-            if (forceDir != oldForceDir){
+        void FixedUpdate()
+        {   
+            int val = (int)(rng.NextDouble()*100);
+            // 2% chance to go a new random direction
+            if (val > 98){
+                forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
+            }
             
-                // Initialize the new velocity
-                Vector3 acceleration = Vector3.zero;
 
-                // Compute alignment
-                acceleration += forceDir * speed;
-
-                 // Compute the new velocity, taking into account mass
-                Vector3 velocity = rigidbody.velocity;
-                velocity += (acceleration / mass) * Time.deltaTime;
-
-                // Ensure the velocity remains within the accepted range
-                velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
-                    minVelocity, maxVelocity);
-
-                // Apply velocity
-                rigidbody.velocity = velocity;
-
-                // Update rotation
-                transform.forward = rigidbody.velocity.normalized;
-
-                //rigidbody.AddForce(forceDir * 15);
-
-                oldForceDir = forceDir;
-            }  
+            //rigidbody.AddForce(forceDir * 15, ForceMode.Force);
+            //rigidbody.velocity = 
+            
+            
 
         }
 
