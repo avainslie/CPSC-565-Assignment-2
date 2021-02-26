@@ -99,18 +99,20 @@ namespace Players{
                 // Restrict top speed to MaxVelocity
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
-                dir.Normalize();
-                c = ComputeCollisionAvoidanceForce().normalized * 15;
+                //dir.Normalize();
+                c = ComputeCollisionAvoidanceForce().normalized * 5;
+                Vector3 r = dir + c;
+                r.Normalize();
                 //Mathf.Clamp(c.magnitude, 0, maxVelocity);
                 
                 if (!getDistracted()){
                     // if less lazy, multiply by a higher number
                     if (laziness > 50){
-                        rigidbody.velocity = (dir + c) * 5;
+                        rigidbody.velocity = (r) * 5;
                         transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
                     }
                     else{
-                        rigidbody.velocity = (dir + c) * 6;
+                        rigidbody.velocity = (r) * 6;
                         transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
                     }
                     
