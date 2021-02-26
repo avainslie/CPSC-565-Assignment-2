@@ -11,7 +11,8 @@ namespace Players{
 
         // Can be set by user
         [SerializeField] private int seed;
-
+        
+        [SerializeField] private bool d;
 
         [SerializeField] private float velocity;
         [SerializeField] private Vector3 snitchPos; // for debugging purposes
@@ -21,6 +22,7 @@ namespace Players{
         [SerializeField] private float maxVelocity;
         [SerializeField] private float aggressiveness;
         [SerializeField] private float maxExhaustion;
+        [SerializeField] private float distraction;
 
         // Scriptable object holding settings for the player this PlayerBehaviour script is on
         public PlayerSettingsScriptable player;
@@ -61,6 +63,7 @@ namespace Players{
             changingR = new System.Random();
 
             exhaustion = 0f;
+            d = false;
 
             // https://answers.unity.com/questions/1141391/accessing-script-from-another-object.html
             otherPlayerScript = GetComponent<PlayerBehaviour>();
@@ -73,6 +76,7 @@ namespace Players{
             maxVelocity = createPlayer(player.maxVelocity, player.maxVelocityStdDev);
             aggressiveness = createPlayer(player.aggressiveness, player.aggressivenessStdDev);
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
+            distraction = createPlayer(player.distracted,player.distractedStdDev);
             
         }
 
@@ -93,14 +97,18 @@ namespace Players{
                 dir.Normalize();
                 Vector3 c = ComputeCollisionAvoidanceForce() * 15;
 
-                rigidbody.velocity = (dir + c) * 5;
-                //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                if (!getDistracted()){
+                    rigidbody.velocity = (dir + c) * 5;
+                    transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                }
 
+            
                 velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
                 
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
             }            
             adjustExhaustion(velocity); 
+            
             
         }
         #endregion
@@ -243,6 +251,7 @@ namespace Players{
         {
             // Check if heading to collision
             // "out" forces variable to be passed by reference
+            // https://answers.unity.com/questions/1164722/raycast-ignore-layers-except.html 
             if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1, 1 << ~LayerMask.NameToLayer("Snitch"))){
                 return Vector3.zero;
             }
@@ -251,6 +260,32 @@ namespace Players{
                 return transform.position - hitInfo.point; 
             } 
         }
+
+        private bool getDistracted(){
+
+            Vector3 forceDir = new Vector3((float)(changingR.NextDouble() * 2) - 1, (float)(changingR.NextDouble() * 2) - 1, (float)(changingR.NextDouble()*2) - 1);
+            int val = (int)(steadyR.NextDouble()*100);
+
+            // More distracted players have a higher chance of going a random direction
+            // Being very distracted is very rare
+            if (distraction >= 18f && val > 95){
+                rigidbody.velocity = forceDir * 15;
+                transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                d = true;
+                return true;
+            }
+            // Chances are better to see this distracted player, who will occasionally go a weird direction
+            else if (distraction >= 16f && distraction < 18f && val > 98){
+                rigidbody.velocity = forceDir * 15;
+                transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                d = true;
+                return true;
+            }
+            return false;
+        }
+
+
+        
 
         #endregion
     }      

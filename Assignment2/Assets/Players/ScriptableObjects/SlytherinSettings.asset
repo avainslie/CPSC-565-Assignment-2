@@ -21,3 +21,5 @@ MonoBehaviour:
   aggressivenessStdDev: 7
   maxExhaustion: 50
   maxExhaustionStdDev: 15
+  distracted: 15
+  distractedStdDev: 1
