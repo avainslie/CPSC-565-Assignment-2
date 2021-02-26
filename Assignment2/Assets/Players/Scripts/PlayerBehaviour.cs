@@ -10,6 +10,9 @@ namespace Players{
         
 
         // Can be set by user
+        [SerializeField] private Vector3 c;
+
+
         [SerializeField] private int seed;
         
         [SerializeField] private bool d;
@@ -23,6 +26,7 @@ namespace Players{
         [SerializeField] private float aggressiveness;
         [SerializeField] private float maxExhaustion;
         [SerializeField] private float distraction;
+        [SerializeField] private float laziness;
 
         // Scriptable object holding settings for the player this PlayerBehaviour script is on
         public PlayerSettingsScriptable player;
@@ -77,6 +81,7 @@ namespace Players{
             aggressiveness = createPlayer(player.aggressiveness, player.aggressivenessStdDev);
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
             distraction = createPlayer(player.distracted,player.distractedStdDev);
+            laziness = createPlayer(player.laziness, player.lazinessStdDev);
             
         }
 
@@ -95,11 +100,20 @@ namespace Players{
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
                 dir.Normalize();
-                Vector3 c = ComputeCollisionAvoidanceForce() * 15;
-
+                c = ComputeCollisionAvoidanceForce().normalized * 15;
+                //Mathf.Clamp(c.magnitude, 0, maxVelocity);
+                
                 if (!getDistracted()){
-                    rigidbody.velocity = (dir + c) * 5;
-                    transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                    // if less lazy, multiply by a higher number
+                    if (laziness > 50){
+                        rigidbody.velocity = (dir + c) * 5;
+                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                    }
+                    else{
+                        rigidbody.velocity = (dir + c) * 6;
+                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                    }
+                    
                 }
 
             
@@ -146,7 +160,6 @@ namespace Players{
 
         // When two players collide
         private void OnTriggerEnter(Collider other){
-            //Debug.Log("something has collided");
             
             // Players from the same team collide
             if (other.gameObject.CompareTag(player.team)){
@@ -159,14 +172,14 @@ namespace Players{
                     }
                 }
                 // Both have the same exhaustion, both become unconscious
-                else if (exhaustion == otherPlayerScript.exhaustion){
+                else if (exhaustion == otherPlayerScript.exhaustion || other.gameObject.CompareTag("Ground")){
                     StartCoroutine(unconsciousTheMethod());
                 }
             }
 
             // Players from opposing teams collide
             else if (other.gameObject.CompareTag(otherPlayerScriptable.team)){
-                Debug.Log("diff team players collided");
+
                 // Code from assignment description
                 double player1Value = player.aggressiveness * (steadyR.NextDouble() * (1.2 - 0.8) + 0.8) 
                 * (1 - (exhaustion / player.maxExhaustion));
@@ -177,14 +190,10 @@ namespace Players{
                 // Compare who had the lower value 
                 if (player2Value > player1Value){
                     StartCoroutine(unconsciousTheMethod());
-                    Debug.Log("message from: " + player.team+ "....p2 value greater than p1. The winning team name: " 
-                    + otherPlayerScriptable.team + " the losting team name: " + player.team);
-                    Debug.Log(player.team + unconscious);
                 }
                 // Both players knocked out
                 else if (player2Value == player1Value){
                     StartCoroutine(unconsciousTheMethod());
-                    Debug.Log("Ouch");
                 }
             }
             else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
@@ -193,7 +202,6 @@ namespace Players{
             else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
                 score.increaseScoreS();
             }
-
         }
 
         // When players are unconscious collide with ground and go back to start pos

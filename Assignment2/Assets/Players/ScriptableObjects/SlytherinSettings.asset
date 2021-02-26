@@ -23,3 +23,5 @@ MonoBehaviour:
   maxExhaustionStdDev: 15
   distracted: 15
   distractedStdDev: 1
+  laziness: 45
+  lazinessStdDev: 10

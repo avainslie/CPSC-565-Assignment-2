@@ -36,6 +36,11 @@ namespace Players{
         [SerializeField] public float distracted = 15f;
 
         [SerializeField] public float distractedStdDev = 1f;
+
+        [Tooltip("How lazy players can be.")]
+        [SerializeField] public float laziness = 50f;
+
+        [SerializeField] public float lazinessStdDev = 10f;
         
     }
 }
