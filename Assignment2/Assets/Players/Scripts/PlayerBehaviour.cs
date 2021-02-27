@@ -69,7 +69,7 @@ namespace Players{
 
         }
 
-        // Spawn team
+        // Set values
         void Start(){
             weight = createPlayer(player.weight, player.weightStdDev);
             maxVelocity = createPlayer(player.maxVelocity, player.maxVelocityStdDev);
@@ -77,7 +77,6 @@ namespace Players{
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
             distraction = createPlayer(player.distracted,player.distractedStdDev);
             laziness = createPlayer(player.laziness, player.lazinessStdDev);
-            
         }
 
         // Update is called once per frame
@@ -98,43 +97,34 @@ namespace Players{
                 c = ComputeCollisionAvoidanceForce();
                 
                 Vector3 forceToApplyToPlayer = dir + c;
+                //Vector3 forceToApplyToPlayer = c;
                 forceToApplyToPlayer.Normalize();
                 
                 if (!getDistracted()){
                     // if less lazy, multiply by a higher number
-                    // if (laziness > 50){
-                    //     //rigidbody.velocity = forceToApplyToPlayer * dist * 5;
-                    //     //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                    if (laziness > 50){
+                        //rigidbody.velocity = forceToApplyToPlayer * dist * 5;
+                        //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
-                    //     //rigidbody.AddForce(forceToApplyToPlayer *  5, ForceMode.Force);
+                        rigidbody.AddForce(forceToApplyToPlayer *  6, ForceMode.Force);
 
-                    //     // Ensure players velocity never exceeds it's maximum
-                    //     rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
-                    // }
-                    //else{
-                        
-
-
+                        // Ensure players velocity never exceeds it's maximum
+                        rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
+                    }
+                    else{
                         //rigidbody.velocity = forceToApplyToPlayer * dist * 10;
                         //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
-                        rigidbody.AddForce(forceToApplyToPlayer *  5);
+                        rigidbody.AddForce(forceToApplyToPlayer *  10, ForceMode.Force);
 
-                         // Ensure players velocity never exceeds it's maximum
+                        // Ensure players velocity never exceeds it's maximum
                         rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
-
-                    //}
-                    
+                    }
                 }
-
-            
-                //velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
-            
             }            
-            adjustExhaustion(rigidbody.velocity.magnitude); 
-            
-            
+            adjustExhaustion(rigidbody.velocity.magnitude);    
         }
+
         #endregion
 
         #region Custom Methods

@@ -16,8 +16,6 @@ namespace snitch
         private System.Random rng;
         private Vector3 oldForceDir;
         private Vector3 forceDir;
-        private float maxHeight;
-        private float minHeight;
 
         /****** PHYSICS 101 NOTES ******
         
@@ -36,32 +34,19 @@ namespace snitch
         private void Awake()
         {   
             rng = new System.Random(seed);  
-            // An idea for later
-            //Random.seed = System.DateTime.Now.Millisecond;
-            // https://answers.unity.com/questions/1606295/transformrotate-doesnt-work-inside-start-method.html 
 
             oldForceDir = Vector3.up * 5;
 
             // NextDouble returns random float between 0.0 and 1.0, do math to get values between -1.0 and 1.0
             // Taken from CPSC 565 - Lecture 8
             forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
-
-            
-
         }
 
         // Start is called before the first frame update
-        // TODO: make it so snitch gradually comes up, not just starts floating
         void Start()
         {   
-
             // Set rigid body to the one on the snitch in the scene
             rigidbody = GetComponent<Rigidbody>(); 
-
-            //Vector3 velocity = rigidbody.velocity;
-            // Ensure the velocity remains within the accepted range
-            //velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
-                //minVelocity, maxVelocity);
 
             // Move up and then randomly at the start of the game
             rigidbody.AddForce(oldForceDir * 15, ForceMode.Force);
@@ -74,20 +59,15 @@ namespace snitch
         void FixedUpdate()
         {   
             int val = (int)(rng.NextDouble()*100);
-            // 10% chance to go a new random direction
-            if (val > 90){
+            // 8% chance to go a new random direction
+            if (val > 92){
                 forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
             }
             
-
+            // ForceMode.Force takes into account mass of the snitch 
             rigidbody.AddForce(forceDir * 15, ForceMode.Force);
+            // Clamp the speed of the snitch to a value set by user
             rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, speed);
         }
-
-
-
-
-
     }
-
 }

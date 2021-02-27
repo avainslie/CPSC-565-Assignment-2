@@ -27,7 +27,7 @@ namespace Players{
                 GameObject s = Instantiate(prefabS, new Vector3(-10, 1.3f, z), Quaternion.identity);
                 s.GetComponent<PlayerBehaviour>().snitch = this.snitch;
 
-                z += 3.5f;
+                z += 4f;
             
             }
             
