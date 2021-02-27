@@ -94,10 +94,7 @@ namespace Players{
             // Only apply force if player is not unconscious
             if (!unconscious){
 
-                float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
-
-                dist = Mathf.Clamp(dist, 0, maxVelocity);
-
+                // Take into account the weight of the player 
                 Vector3 dir = (snitch.transform.position - transform.position) * playerMassForceWeight();
                 
                 c = ComputeCollisionAvoidanceForce() * collisionForceWeight;

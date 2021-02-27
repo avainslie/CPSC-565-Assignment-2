@@ -22,7 +22,7 @@ namespace Players{
 
         [SerializeField] public float maxVelocityStdDev = 2f;
 
-        [Tooltip("How forceful players are. Affects if they become unconscious upon collision with another player.")]
+        [Tooltip("How aggressive players are. Affects if they become unconscious upon collision with another player.")]
         [SerializeField] public float aggressiveness = 25f;
 
         [SerializeField] public float aggressivenessStdDev = 5f;
