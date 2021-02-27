@@ -84,13 +84,13 @@ namespace snitch
         {   
             int val = (int)(rng.NextDouble()*100);
             // 2% chance to go a new random direction
-            if (val > 98){
+            if (val > 90){
                 forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
             }
             
 
-            //rigidbody.AddForce(forceDir * 15, ForceMode.Force);
-            //rigidbody.velocity = 
+            rigidbody.AddForce(forceDir * 15, ForceMode.Force);
+            rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, speed);
             
             
 
