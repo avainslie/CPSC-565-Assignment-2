@@ -200,6 +200,7 @@ namespace Players{
                     StartCoroutine(unconsciousTheMethod());
                 }
             }
+            // Not successive catches
             else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver && !gPoint){
                 gPoint = true;
                 sPoint = false;
@@ -239,6 +240,7 @@ namespace Players{
             unconscious = true;
             rigidbody.velocity = Vector3.zero;
             rigidbody.useGravity = true;
+            // Send players back to their side of the field
             if (tag.Equals("Gryffindor")){
                 rigidbody.position = new Vector3(10, 1.3f, (float)(Random.Range(-10f,10f)));
             }
@@ -312,6 +314,7 @@ namespace Players{
             return false;
         }
 
+        // Heavier players get less "weight" on their force, so they are slower
         private float playerMassForceWeight(){
             if (weight >= 120){
                 return 1;

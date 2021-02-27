@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// https://www.youtube.com/watch?v=aPXvoWVabPY 
 namespace Players{
     [CreateAssetMenu(fileName = "PlayerSettings", menuName = "ScriptableObjects/PlayerSettingsScriptable", order = 1)]
 

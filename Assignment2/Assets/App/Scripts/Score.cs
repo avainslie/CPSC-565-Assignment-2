@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
 namespace Players{
     public class Score : MonoBehaviour
     {

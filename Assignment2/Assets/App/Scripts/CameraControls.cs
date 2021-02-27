@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /**
-* All code is taken from CPSC 565 Lecture 8 w/minor edits
+* All code is taken from CPSC 565 Lecture 8 w/minor edits!!
 **/
 public class CameraControls : MonoBehaviour
 {
