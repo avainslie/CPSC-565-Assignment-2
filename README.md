@@ -7,16 +7,19 @@ This project simulates a simplified version of the game of quidditch from Harry 
 Unity3D engine is used to create the simulation and implement the algorithms that dictate the behaviour of the players and the movement of the snitch.
 
 <img width="586" alt="Screen Shot 2021-02-26 at 8 11 11 PM" src="https://user-images.githubusercontent.com/50717419/109373890-cb735100-786e-11eb-8f57-4b8b187b5529.png">
+*An image of the snitch*
 
 The two competing teams are differentiated by their colour with red representing Slytherin and green for Gryffindor. 
 
 Players start on their side of the field before beginning to fly after the snitch.
 
 <img width="689" alt="Screen Shot 2021-02-26 at 9 49 58 PM" src="https://user-images.githubusercontent.com/50717419/109375786-966dfb00-787c-11eb-9d67-8bec508a68bc.png">
+*Players at starting positions*
 
 When a player becomes unconscious, they stop moving, fall to the ground, and return to their teams starting side. They must rest for 10 seconds before entering the game play again. The image below shows some unconscious players.
 
 <img width="388" alt="Screen Shot 2021-02-26 at 9 14 52 PM" src="https://user-images.githubusercontent.com/50717419/109375884-7db21500-787d-11eb-8527-b93f0d10995a.png">
+*Unconscious players*
 
 Players movement is based off a balance of avoiding colliding into objects that are not the snitch while also chasing the snitch.
 Players of opposing teams collide differently than players that share the same team, with the former taking aggressiveness into consideration and being more likely to lead to a player becoming unconscious. 
