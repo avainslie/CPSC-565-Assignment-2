@@ -372,7 +372,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &126238506
 MeshRenderer:
@@ -988,7 +988,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 579336276}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7c3ee3df104b4b42bd71853649961a0, type: 3}
   m_Name: 
@@ -2030,6 +2030,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gryffindor Pivot
       objectReference: {fileID: 0}
+    - target: {fileID: 5710366140316939642, guid: f30b1a507029144809df4fa986a3552a,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5710366140316939643, guid: f30b1a507029144809df4fa986a3552a,
         type: 3}
       propertyPath: score
@@ -2163,6 +2168,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Slytherin Pivot
+      objectReference: {fileID: 0}
+    - target: {fileID: 9078140921159075116, guid: 15973df2ed83541be9cb3f4e7f6da632,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9078140921159075117, guid: 15973df2ed83541be9cb3f4e7f6da632,
         type: 3}

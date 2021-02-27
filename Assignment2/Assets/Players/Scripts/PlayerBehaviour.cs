@@ -15,7 +15,7 @@ namespace Players{
 
         [SerializeField] private int seed;
         
-        [SerializeField] private bool d;
+        [SerializeField] private bool Distracted;
 
         [SerializeField] private float velocity;
         [SerializeField] private Vector3 snitchPos; // for debugging purposes
@@ -41,9 +41,6 @@ namespace Players{
         public GameObject snitch;
 
         public Score score;
-
-        // 
-        private Transform parentTransform;
         
         private Rigidbody rigidbody;
         private System.Random steadyR; 
@@ -59,16 +56,11 @@ namespace Players{
             // Set rigid body to the one on the player in the scene
             rigidbody = GetComponent<Rigidbody>();
 
-            // For pivot point
-            //parentTransform = this.transform.parent.transform;
-
-            // transform look at
-
             steadyR = new System.Random(seed);  
             changingR = new System.Random();
 
             exhaustion = 0f;
-            d = false;
+            Distracted = false;
             gPoint = false;
             sPoint = false;
 
@@ -181,7 +173,6 @@ namespace Players{
             
             // Players from the same team collide
             if (other.gameObject.CompareTag(player.team)){
-                Debug.Log("players of same team collided");
                 int val = (int)(steadyR.NextDouble()*100);
                 // Player with the highest exhaustion will become unconscious 5% of the time
                 if (exhaustion < otherPlayerScript.exhaustion){
@@ -311,14 +302,14 @@ namespace Players{
             if (distraction >= 18f && val > 95){
                 rigidbody.velocity = forceDir * 15;
                 transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                d = true;
+                Distracted = true;
                 return true;
             }
             // Chances are better to see this distracted player, who will occasionally go a weird direction
             else if (distraction >= 16f && distraction < 18f && val > 98){
                 rigidbody.velocity = forceDir * 15;
                 transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                d = true;
+                Distracted = true;
                 return true;
             }
             return false;

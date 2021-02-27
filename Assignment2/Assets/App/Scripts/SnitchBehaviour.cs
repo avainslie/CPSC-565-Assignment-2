@@ -16,11 +16,8 @@ namespace snitch
         private System.Random rng;
         private Vector3 oldForceDir;
         private Vector3 forceDir;
-        private bool liftOff;
         private float maxHeight;
         private float minHeight;
-        private float mass;
-        private float momentum;
 
         /****** PHYSICS 101 NOTES ******
         
@@ -43,13 +40,7 @@ namespace snitch
             //Random.seed = System.DateTime.Now.Millisecond;
             // https://answers.unity.com/questions/1606295/transformrotate-doesnt-work-inside-start-method.html 
 
-            momentum = 0f;
-
             oldForceDir = Vector3.up * 5;
-
-            mass = 5f;
-
-            liftOff = false;
 
             // NextDouble returns random float between 0.0 and 1.0, do math to get values between -1.0 and 1.0
             // Taken from CPSC 565 - Lecture 8
@@ -83,7 +74,7 @@ namespace snitch
         void FixedUpdate()
         {   
             int val = (int)(rng.NextDouble()*100);
-            // 2% chance to go a new random direction
+            // 10% chance to go a new random direction
             if (val > 90){
                 forceDir = (new Vector3((float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble() * 2) - 1, (float)(rng.NextDouble()*2) - 1)) * 5;
             }
@@ -91,9 +82,6 @@ namespace snitch
 
             rigidbody.AddForce(forceDir * 15, ForceMode.Force);
             rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, speed);
-            
-            
-
         }
 
 
