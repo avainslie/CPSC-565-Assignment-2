@@ -87,7 +87,7 @@ namespace Players{
 
         // Update is called once per frame
         // Taken and modified from CPSC 565 - Lecture 8
-        void Update()
+        void FixedUpdate()
         {
             snitchPos = snitch.transform.position; // FOR DEBUGGING
 
@@ -99,29 +99,56 @@ namespace Players{
                 // Restrict top speed to MaxVelocity
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
                 Vector3 dir = (snitch.transform.position - transform.position);
-                dir.Normalize();
-                c = ComputeCollisionAvoidanceForce().normalized * 15;
+                //dir.Normalize();
+                c = ComputeCollisionAvoidanceForce() * 15;
                 //Mathf.Clamp(c.magnitude, 0, maxVelocity);
+                Vector3 forceToApplyToPlayer = dir + c;
+                //forceToApplyToPlayer.Normalize();
                 
                 if (!getDistracted()){
                     // if less lazy, multiply by a higher number
-                    if (laziness > 50){
-                        rigidbody.velocity = (dir + c) * 5;
-                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                    }
-                    else{
-                        rigidbody.velocity = (dir + c) * 6;
-                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                    }
+                    // if (laziness > 50){
+                    //     //rigidbody.velocity = forceToApplyToPlayer * dist * 5;
+                    //     //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+
+                    //     //rigidbody.AddForce(forceToApplyToPlayer *  5, ForceMode.Force);
+
+                    //     // Ensure players velocity never exceeds it's maximum
+                    //     rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
+                    // }
+                    //else{
+                        Vector3 acceleration = Vector3.zero;
+                        acceleration += forceToApplyToPlayer;
+
+                        Vector3 velocity = rigidbody.velocity;
+                        velocity += acceleration * Time.deltaTime;
+
+                        velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude,
+                            0, maxVelocity);
+
+                        rigidbody.velocity = velocity;
+
+                        transform.forward = rigidbody.velocity.normalized;
+
+
+                        //rigidbody.velocity = forceToApplyToPlayer * dist * 10;
+                        //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+
+                        //rigidbody.AddForce(forceToApplyToPlayer *  5, ForceMode.Force);
+
+                         // Ensure players velocity never exceeds it's maximum
+                        rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
+
+                    //}
                     
                 }
 
             
-                velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
+                //velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
                 
                 //parentTransform.rotation = Quaternion.LookRotation(dir);
             }            
-            adjustExhaustion(velocity); 
+            adjustExhaustion(rigidbody.velocity.magnitude); 
             
             
         }
