@@ -48,7 +48,8 @@ namespace Players{
         private Rigidbody rigidbody;
         private System.Random steadyR; 
         private System.Random changingR;
-
+        private bool gPoint;
+        private bool sPoint;
         #endregion
 
         #region Unity Methods
@@ -68,6 +69,8 @@ namespace Players{
 
             exhaustion = 0f;
             d = false;
+            gPoint = false;
+            sPoint = false;
 
             // https://answers.unity.com/questions/1141391/accessing-script-from-another-object.html
             otherPlayerScript = GetComponent<PlayerBehaviour>();
@@ -211,11 +214,26 @@ namespace Players{
                     StartCoroutine(unconsciousTheMethod());
                 }
             }
-            else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
-                score.increaseScoreG();
+            else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver && !gPoint){
+                gPoint = true;
+                sPoint = false;
+                score.increaseScoreG(1);
             }
-            else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver){
-                score.increaseScoreS();
+            else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver && !sPoint){
+                sPoint = true;
+                gPoint = false;
+                score.increaseScoreS(1);
+            }
+            // Successive catches are worth double points
+            else if (player.team.Equals("Gryffindor") && other.gameObject.CompareTag("Snitch") && !score.gameOver && gPoint){
+                sPoint = true;
+                gPoint = false;
+                score.increaseScoreG(2);
+            }
+            else if (player.team.Equals("Slytherin") && other.gameObject.CompareTag("Snitch") && !score.gameOver && sPoint){
+                sPoint = true;
+                gPoint = false;
+                score.increaseScoreS(2);
             }
         }
 

@@ -34,30 +34,30 @@ namespace Players{
             countTextS.text = "Slytherin count: " + countS.ToString();
         }
 
-        public void increaseScoreG(){
-            countG++;
+        public void increaseScoreG(int points){
+            countG+= points;
             if(!win()){
                 setCountText(countG);
             }
         }
 
-        public void increaseScoreS(){
-            countS++;
+        public void increaseScoreS(int points){
+            countS+= points;
             if(!win()){
                 setCountText(countS);
             }  
         }
 
         private bool win(){
-            if (countG == 20){
+            if (countG == 100){
                 whoWon.text = "Gryffindor won!!";
-                countTextG.text = "Gryffindor count: 20";
+                countTextG.text = "Gryffindor count: 100";
                 gameOver = true;
                 return true;
             }
-            else if (countS == 20){
+            else if (countS == 100){
                 whoWon.text = "Slytherin won!!";
-                countTextS.text = "Slytherin count: 20";
+                countTextS.text = "Slytherin count: 100";
                 gameOver = true;
                 return true;
             }
