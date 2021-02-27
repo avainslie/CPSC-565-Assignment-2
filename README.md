@@ -35,7 +35,9 @@ These traits are implemented by selecting a random value from a normal distribut
 
 ### Example game play
 
-![exampleGamePlay](https://user-images.githubusercontent.com/50717419/109375755-658dc600-787c-11eb-9146-af40f551f8cf.gif)
+![game](https://user-images.githubusercontent.com/50717419/109377114-6f1c2b80-7886-11eb-9b63-6df57ce09e7b.gif)
+
+![above](https://user-images.githubusercontent.com/50717419/109377135-95da6200-7886-11eb-8000-05c1636938e0.gif)
 
 
 ## Quick Start
