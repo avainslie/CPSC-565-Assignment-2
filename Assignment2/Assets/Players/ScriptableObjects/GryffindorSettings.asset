@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 664141b989c0840ef8d04e66d32e10c5, type: 3}
+  m_Name: GryffindorSettings
+  m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects:GryffindorSettingsScriptable
+  team: Gryffindor
+  weight: 75
+  weightStdDev: 12
+  maxVelocity: 18
+  maxVelocityStdDev: 2
+  aggressiveness: 22
+  aggressivenessStdDev: 3
+  maxExhaustion: 65
+  maxExhaustionStdDev: 13
+  distracted: 13
+  distractedStdDev: 1
+  laziness: 60
+  lazinessStdDev: 10
