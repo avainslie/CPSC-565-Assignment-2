@@ -2003,7 +2003,7 @@ PrefabInstance:
     - target: {fileID: 5710366140316939642, guid: f30b1a507029144809df4fa986a3552a,
         type: 3}
       propertyPath: m_Radius
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 5710366140316939643, guid: f30b1a507029144809df4fa986a3552a,
         type: 3}
@@ -2018,7 +2018,7 @@ PrefabInstance:
     - target: {fileID: 5710366140316939643, guid: f30b1a507029144809df4fa986a3552a,
         type: 3}
       propertyPath: collisionForceWeight
-      value: 100
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5710366140316939646, guid: f30b1a507029144809df4fa986a3552a,
         type: 3}
@@ -2147,7 +2147,7 @@ PrefabInstance:
     - target: {fileID: 9078140921159075116, guid: 15973df2ed83541be9cb3f4e7f6da632,
         type: 3}
       propertyPath: m_Radius
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 9078140921159075117, guid: 15973df2ed83541be9cb3f4e7f6da632,
         type: 3}
@@ -2162,7 +2162,7 @@ PrefabInstance:
     - target: {fileID: 9078140921159075117, guid: 15973df2ed83541be9cb3f4e7f6da632,
         type: 3}
       propertyPath: collisionForceWeight
-      value: 100
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15973df2ed83541be9cb3f4e7f6da632, type: 3}

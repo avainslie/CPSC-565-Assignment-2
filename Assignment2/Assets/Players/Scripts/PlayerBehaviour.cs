@@ -98,7 +98,7 @@ namespace Players{
 
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
 
-                Vector3 dir = snitch.transform.position - transform.position;
+                Vector3 dir = (snitch.transform.position - transform.position) * playerMassForceWeight();
                 
                 c = ComputeCollisionAvoidanceForce() * collisionForceWeight;
                 
@@ -112,6 +112,7 @@ namespace Players{
                         rigidbody.velocity = forceToApplyToPlayer  * 5;
                         transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
+                        // Takes into account mass, but waaaay to slow
                         //rigidbody.AddForce(forceToApplyToPlayer *  20, ForceMode.Force);
 
                         // Ensure players velocity never exceeds it's maximum
@@ -121,6 +122,7 @@ namespace Players{
                         rigidbody.velocity = forceToApplyToPlayer * 10;
                         transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
+                        // Takes into account mass, but waaaay to slow
                         //rigidbody.AddForce(forceToApplyToPlayer *  30, ForceMode.Force);
 
                         // Ensure players velocity never exceeds it's maximum
@@ -311,6 +313,21 @@ namespace Players{
                 return true;
             }
             return false;
+        }
+
+        private float playerMassForceWeight(){
+            if (weight >= 120){
+                return 1;
+            }
+            else if (weight >= 90 && weight < 120){
+                return 5;
+            }
+            else if (weight >= 78 && weight < 90){
+                return 8;
+            }
+            else{
+                return 10;
+            }
         }
 
 
