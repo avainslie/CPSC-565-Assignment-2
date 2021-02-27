@@ -2,7 +2,7 @@
 
 ## CPSC-565-Assignment-2
 
-This project simulates a simplified version of the game of quidditch from Harry Potter. In the game, wizards ride brooms and chase an object called a snitch. This snitch moves quickly and randomly. Each time a player "catches" the snitch, they score a point for their team. Catches that follow eachother are worth two points. The first team to reach 100 points wins the game.
+This project simulates a simplified version of the game of quidditch from Harry Potter. In the game, wizards ride brooms and chase an object called a snitch. This snitch moves quickly and randomly. Each time a player "catches" the snitch, they score a point for their team. "Catches" that follow eachother are worth two points. The first team to reach 100 points wins the game.
 
 Unity3D engine is used to create the simulation and implement the algorithms that dictate the behaviour of the players and the movement of the snitch.
 
