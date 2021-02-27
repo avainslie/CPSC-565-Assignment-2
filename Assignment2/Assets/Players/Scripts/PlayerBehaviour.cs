@@ -87,7 +87,7 @@ namespace Players{
 
         // Update is called once per frame
         // Taken and modified from CPSC 565 - Lecture 8
-        void Update()
+        void FixedUpdate()
         {
             snitchPos = snitch.transform.position; // FOR DEBUGGING
 
@@ -96,32 +96,47 @@ namespace Players{
 
                 float dist = (Vector3.Distance(transform.position, snitch.transform.position)) / 10;
 
-                // Restrict top speed to MaxVelocity
                 dist = Mathf.Clamp(dist, 0, maxVelocity);
-                Vector3 dir = (snitch.transform.position - transform.position);
-                dir.Normalize();
-                c = ComputeCollisionAvoidanceForce().normalized * 15;
-                //Mathf.Clamp(c.magnitude, 0, maxVelocity);
+
+                Vector3 dir = snitch.transform.position - transform.position;
+                
+                c = ComputeCollisionAvoidanceForce();
+                
+                Vector3 forceToApplyToPlayer = dir + c;
+                forceToApplyToPlayer.Normalize();
                 
                 if (!getDistracted()){
                     // if less lazy, multiply by a higher number
-                    if (laziness > 50){
-                        rigidbody.velocity = (dir + c) * 5;
-                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                    }
-                    else{
-                        rigidbody.velocity = (dir + c) * 6;
-                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
-                    }
+                    // if (laziness > 50){
+                    //     //rigidbody.velocity = forceToApplyToPlayer * dist * 5;
+                    //     //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+
+                    //     //rigidbody.AddForce(forceToApplyToPlayer *  5, ForceMode.Force);
+
+                    //     // Ensure players velocity never exceeds it's maximum
+                    //     rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
+                    // }
+                    //else{
+                        
+
+
+                        //rigidbody.velocity = forceToApplyToPlayer * dist * 10;
+                        //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+
+                        rigidbody.AddForce(forceToApplyToPlayer *  5);
+
+                         // Ensure players velocity never exceeds it's maximum
+                        rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
+
+                    //}
                     
                 }
 
             
-                velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
-                
-                //parentTransform.rotation = Quaternion.LookRotation(dir);
+                //velocity = rigidbody.velocity.magnitude; // FOR DEBUGGING
+            
             }            
-            adjustExhaustion(velocity); 
+            adjustExhaustion(rigidbody.velocity.magnitude); 
             
             
         }
@@ -259,12 +274,12 @@ namespace Players{
             // Check if heading to collision
             // "out" forces variable to be passed by reference
             // https://answers.unity.com/questions/1164722/raycast-ignore-layers-except.html 
-            if (!Physics.SphereCast(transform.position, 1, transform.forward, out RaycastHit hitInfo, 1, 1 << ~LayerMask.NameToLayer("Snitch"))){
+            if (!Physics.SphereCast(transform.position, 2, transform.forward, out RaycastHit hitInfo, 2, 1 << ~LayerMask.NameToLayer("Snitch"))){
                 return Vector3.zero;
             }
-            // Compute force
+            // Compute force going away from object player is about to hit
             else{
-                return transform.position - hitInfo.point; 
+                return (transform.position - hitInfo.point) * 20; 
             } 
         }
 
