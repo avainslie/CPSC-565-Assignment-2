@@ -48,6 +48,8 @@ namespace snitch
             // Set rigid body to the one on the snitch in the scene
             rigidbody = GetComponent<Rigidbody>(); 
 
+            rigidbody.mass = 10f;
+
             // Move up and then randomly at the start of the game
             rigidbody.AddForce(oldForceDir * 15, ForceMode.Force);
             rigidbody.AddForce(forceDir * 15, ForceMode.Force);

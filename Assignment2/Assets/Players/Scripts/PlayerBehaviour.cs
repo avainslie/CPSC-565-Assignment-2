@@ -27,6 +27,8 @@ namespace Players{
         [SerializeField] private float maxExhaustion;
         [SerializeField] private float distraction;
         [SerializeField] private float laziness;
+        [SerializeField] private float collisionForceWeight;
+
 
         // Scriptable object holding settings for the player this PlayerBehaviour script is on
         public PlayerSettingsScriptable player;
@@ -47,6 +49,7 @@ namespace Players{
         private System.Random changingR;
         private bool gPoint;
         private bool sPoint;
+
         #endregion
 
         #region Unity Methods
@@ -77,6 +80,9 @@ namespace Players{
             maxExhaustion = createPlayer(player.maxExhaustion, player.maxExhaustionStdDev);
             distraction = createPlayer(player.distracted,player.distractedStdDev);
             laziness = createPlayer(player.laziness, player.lazinessStdDev);
+
+            // Assign rigidbody's mass to the weight
+            rigidbody.mass = weight;
         }
 
         // Update is called once per frame
@@ -94,7 +100,7 @@ namespace Players{
 
                 Vector3 dir = snitch.transform.position - transform.position;
                 
-                c = ComputeCollisionAvoidanceForce();
+                c = ComputeCollisionAvoidanceForce() * collisionForceWeight;
                 
                 Vector3 forceToApplyToPlayer = dir + c;
                 //Vector3 forceToApplyToPlayer = c;
@@ -103,19 +109,19 @@ namespace Players{
                 if (!getDistracted()){
                     // if less lazy, multiply by a higher number
                     if (laziness > 50){
-                        //rigidbody.velocity = forceToApplyToPlayer * dist * 5;
-                        //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                        rigidbody.velocity = forceToApplyToPlayer  * 5;
+                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
-                        rigidbody.AddForce(forceToApplyToPlayer *  6, ForceMode.Force);
+                        //rigidbody.AddForce(forceToApplyToPlayer *  20, ForceMode.Force);
 
                         // Ensure players velocity never exceeds it's maximum
                         rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
                     }
                     else{
-                        //rigidbody.velocity = forceToApplyToPlayer * dist * 10;
-                        //transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
+                        rigidbody.velocity = forceToApplyToPlayer * 10;
+                        transform.forward = rigidbody.velocity.normalized * Time.deltaTime;
 
-                        rigidbody.AddForce(forceToApplyToPlayer *  10, ForceMode.Force);
+                        //rigidbody.AddForce(forceToApplyToPlayer *  30, ForceMode.Force);
 
                         // Ensure players velocity never exceeds it's maximum
                         rigidbody.velocity = Vector3.ClampMagnitude(rigidbody.velocity, maxVelocity);
@@ -273,12 +279,14 @@ namespace Players{
             // Check if heading to collision
             // "out" forces variable to be passed by reference
             // https://answers.unity.com/questions/1164722/raycast-ignore-layers-except.html 
+
+            // If nothing in the sphere cast (ignoring the snitch since we want to collide with it)
             if (!Physics.SphereCast(transform.position, 2, transform.forward, out RaycastHit hitInfo, 2, 1 << ~LayerMask.NameToLayer("Snitch"))){
                 return Vector3.zero;
             }
             // Compute force going away from object player is about to hit
             else{
-                return (transform.position - hitInfo.point) * 20; 
+                return transform.position - hitInfo.point; 
             } 
         }
 
